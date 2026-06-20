@@ -1,0 +1,31 @@
+name: Build BW Tool
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Restore packages
+      run: nuget restore BW_tool.sln
+
+    - name: Build
+      run: msbuild BW_tool.sln /p:Configuration=Release
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: BW_tool_build
+        path: |
+          **\bin\Release\*.exe
+          **\bin\Release\*.dll
