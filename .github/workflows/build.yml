@@ -8,8 +8,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
@@ -20,14 +19,11 @@ jobs:
     - name: Restore
       run: nuget restore BW_tool.sln
 
-    - name: Build (verbose debug)
-      shell: cmd
-      run: |
-        msbuild BW_tool.sln /p:Configuration=Release /v:diag
+    - name: Build
+      run: msbuild BW_tool.sln /p:Configuration=Release
 
-    - name: Upload artifact
+    - name: Upload
       uses: actions/upload-artifact@v4
       with:
         name: BW_tool
-        path: |
-          **\bin\Release\*.exe
+        path: **\bin\Release\*
